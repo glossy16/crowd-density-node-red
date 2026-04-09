@@ -18,5 +18,5 @@ This project simulates an IoT-based crowd monitoring system using Node-RED.
 
 
 
-## ⚠️ Note
+## Note
 This is a simulation-only project (no hardware used).
