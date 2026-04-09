@@ -1,0 +1,917 @@
+[
+    {
+        "id": "111c29150b248e1f",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "45999fa71a054ba2",
+        "type": "mqtt-broker",
+        "name": "Local Mosquitto",
+        "broker": "localhost:1883",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "c152d23fe77f30eb",
+        "type": "ui_tab",
+        "name": " Crowd Monitor",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "34f3348d98223fbb",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "20d9cbfa361b278b",
+        "type": "ui_group",
+        "name": "Sensor Data",
+        "tab": "c152d23fe77f30eb",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "5b056715b8da9fe6",
+        "type": "inject",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 200,
+        "wires": [
+            [
+                "378a7bf60bfa5623"
+            ]
+        ]
+    },
+    {
+        "id": "378a7bf60bfa5623",
+        "type": "function",
+        "z": "111c29150b248e1f",
+        "name": "function 1",
+        "func": "// Simulating HC-SR04 ultrasonic distance readings\n// Closer distance = more people, higher density\nconst zoneArea = 10; // square metres\nconst distance = Math.random() * 400 + 20; // 20–420 cm\nconst peopleEstimate = Math.max(0, Math.round((420 - distance) / 40));\nconst density = +(peopleEstimate / zoneArea).toFixed(2);\n\nmsg.payload = {\n    sensor: \"ultrasonic\",\n    distance_cm: +distance.toFixed(1),\n    people_estimate: peopleEstimate,\n    density_per_sqm: density,\n    zone: \"Gate-A\",\n    timestamp: new Date().toISOString()\n};\nmsg.topic = \"crowd/ultrasonic\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 200,
+        "wires": [
+            [
+                "a3ca66ae476daa09"
+            ]
+        ]
+    },
+    {
+        "id": "a3ca66ae476daa09",
+        "type": "mqtt out",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "topic": "crowd/ultrasonic",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "45999fa71a054ba2",
+        "x": 480,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "a888158e7d8b0dec",
+        "type": "inject",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 300,
+        "wires": [
+            [
+                "07d48e50d9fe0ba1"
+            ]
+        ]
+    },
+    {
+        "id": "07d48e50d9fe0ba1",
+        "type": "function",
+        "z": "111c29150b248e1f",
+        "name": "function 2",
+        "func": "// Simulate passive infrared motion detection\n// Models normal vs spike activity (stampede precursor)\nconst baseMotion = Math.random();\nconst spikeEvent = Math.random() < 0.05; // 5% chance of a spike\nconst motionLevel = spikeEvent ? Math.min(1, baseMotion + 0.6) : baseMotion;\nconst triggered = motionLevel > 0.4;\n\nmsg.payload = {\n    sensor: \"pir\",\n    motion_level: +motionLevel.toFixed(3),\n    triggered: triggered,\n    spike_detected: spikeEvent,\n    zone: \"Gate-A\",\n    timestamp: new Date().toISOString()\n};\nmsg.topic = \"crowd/pir\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 300,
+        "wires": [
+            [
+                "ccc02f90bcf9f4fc"
+            ]
+        ]
+    },
+    {
+        "id": "ccc02f90bcf9f4fc",
+        "type": "mqtt out",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "topic": "crowd/pir",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "45999fa71a054ba2",
+        "x": 460,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "35898cd34a600d39",
+        "type": "inject",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "5",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 380,
+        "wires": [
+            [
+                "3cd01911dfab4269"
+            ]
+        ]
+    },
+    {
+        "id": "3cd01911dfab4269",
+        "type": "function",
+        "z": "111c29150b248e1f",
+        "name": "function 3",
+        "func": "// Simulate WiFi probe requests + BT advertisement scanning\n// Device count is a proxy for people count\nconst timeOfDay = new Date().getHours();\nconst peakHour = (timeOfDay >= 9 && timeOfDay <= 18);\nconst baseDevices = peakHour ? 45 : 12;\nconst deviceCount = Math.round(baseDevices + (Math.random() * 30) - 10);\nconst uniqueDevices = Math.round(deviceCount * 0.75); // ~75% unique\n\nmsg.payload = {\n    sensor: \"wifi_bt\",\n    total_devices: Math.max(0, deviceCount),\n    unique_devices: Math.max(0, uniqueDevices),\n    zone: \"Gate-A\",\n    rssi_avg: +(-(Math.random() * 40 + 50)).toFixed(1), // -50 to -90 dBm\n    timestamp: new Date().toISOString()\n};\nmsg.topic = \"crowd/wifi\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 380,
+        "wires": [
+            [
+                "4285f80d1ce781f7"
+            ]
+        ]
+    },
+    {
+        "id": "4285f80d1ce781f7",
+        "type": "mqtt out",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "topic": "crowd/wifi",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "45999fa71a054ba2",
+        "x": 460,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "e80b67837931bf93",
+        "type": "mqtt in",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "topic": "crowd/ultrasonic",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "45999fa71a054ba2",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 660,
+        "y": 200,
+        "wires": [
+            [
+                "a3ca66ae476daa09",
+                "03b182df2e5df68e"
+            ]
+        ]
+    },
+    {
+        "id": "3006c049088ab18b",
+        "type": "mqtt in",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "topic": "crowd/pir",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "45999fa71a054ba2",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 600,
+        "y": 300,
+        "wires": [
+            [
+                "ccc02f90bcf9f4fc",
+                "03b182df2e5df68e"
+            ]
+        ]
+    },
+    {
+        "id": "20644af788f12334",
+        "type": "mqtt in",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "topic": "crowd/wifi",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "45999fa71a054ba2",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 620,
+        "y": 380,
+        "wires": [
+            [
+                "4285f80d1ce781f7",
+                "03b182df2e5df68e"
+            ]
+        ]
+    },
+    {
+        "id": "03b182df2e5df68e",
+        "type": "function",
+        "z": "111c29150b248e1f",
+        "name": "Sensor Fusion Engine",
+        "func": "msg.payload.components = {\n    density: Math.floor(Math.random()*100),\n    motion: Math.random().toFixed(2),\n    device_count: Math.floor(Math.random()*50)\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 860,
+        "y": 300,
+        "wires": [
+            [
+                "aa1d53b3b2c3c681"
+            ]
+        ]
+    },
+    {
+        "id": "fde3aa5a250af0e2",
+        "type": "function",
+        "z": "111c29150b248e1f",
+        "name": "Risk Classifier",
+        "func": "// 🔒 Safe extraction (no crash even if missing)\nconst state = msg.payload.state || {};\nconst ultrasonic = state.ultrasonic || {};\nconst pir = state.pir || {};\nconst wifi = state.wifi || {};\n\n// 🧠 Fallbacks (VERY IMPORTANT)\nconst density = ultrasonic.density ?? Math.random() * 3;\nconst motion = pir.motion_level ?? Math.random();\nconst spike = pir.spike ?? false;\nconst devices = wifi.unique_devices ?? Math.floor(Math.random() * 50);\n\n// 🎯 Weighted scoring system (0–100)\n\n// ❌ ORIGINAL LINE (commented)\n// let score = Math.random() > 0.7 ? 90 : 20;\n\n// ✅ NEW: calculate score normally first\nlet score = 0;\n\n// Ultrasonic (0–40)\nscore += Math.min(40, density * 11.4);\n\n// PIR (0–35)\nscore += motion * 25;\nif (spike) score += 10;\n\n// WiFi (0–25)\nscore += Math.min(25, (devices / 50) * 25);\n\n// ✅ NEW: AFTER calculation, randomly force CRITICAL sometimes\nif (Math.random() > 0.7) {\n    score = 90;  // force CRITICAL occasionally\n}\n\nscore = Math.min(100, Math.round(score));\n\n// 🧪 DEBUG (optional, remove later)\nnode.warn(\"Score = \" + score);\n\n// 🚦 Risk classification\nlet risk, color, action;\n\nif (score < 30) {\n    risk = \"LOW\";       \n    color = \"#2e7d32\"; \n    action = \"Normal monitoring\";\n} else if (score < 55) {\n    risk = \"MEDIUM\";    \n    color = \"#f57f17\"; \n    action = \"Increase vigilance\";\n} else if (score < 75) {\n    risk = \"HIGH\";      \n    color = \"#e65100\"; \n    action = \"Deploy staff to zone\";\n} else {\n    risk = \"CRITICAL\";  \n    color = \"#b71c1c\"; \n    action = \"Initiate evacuation protocol\";\n}\n\n// 📦 Final payload\nmsg.payload = {\n    risk_level: risk,\n    risk_score: score,\n    color: color,\n    recommended_action: action,\n\n    components: {\n        density: density,\n        motion: motion,\n        device_count: devices\n    },\n\n    zone: \"Gate-A\",\n    timestamp: new Date().toISOString()\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1080,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cbf1fd3935f15678",
+        "type": "switch",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "property": "payload.risk_level",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "LOW",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "MEDIUM",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "HIGH",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "CRITICAL",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 1250,
+        "y": 300,
+        "wires": [
+            [],
+            [],
+            [
+                "ae2a9d45f8a4da82"
+            ],
+            [
+                "ae2a9d45f8a4da82",
+                "f299f51296914e3f"
+            ]
+        ]
+    },
+    {
+        "id": "ae2a9d45f8a4da82",
+        "type": "template",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "ALERT - Zone: {{payload.components.zone}}\nRisk Level: {{payload.risk_level}}\nScore: {{payload.risk_score}}/100\nDensity: {{payload.components.density}} people/m²\nMotion Spike: {{payload.components.spike}}\nDevices Detected: {{payload.components.devices}}\nTime: {{payload.timestamp}}\nRecommended Action: {{payload.recommended_action}}",
+        "output": "str",
+        "x": 1420,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c3b34b10a02aab83",
+        "type": "mqtt out",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "topic": "crowd/alerts",
+        "qos": "1",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "45999fa71a054ba2",
+        "x": 1710,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "f299f51296914e3f",
+        "type": "http request",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://webhook.site/a47d6f64-3fe0-4798-9298-63cd553b1a6f",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1470,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a3aaed5dd4e4e165",
+        "type": "ui_chart",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "group": "20d9cbfa361b278b",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "Live Density Chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 890,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "65b2a9eb7866ac45",
+        "type": "function",
+        "z": "111c29150b248e1f",
+        "name": "function 5",
+        "func": "msg.payload = msg.payload.components.density; msg.topic = \"density\"; return msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 880,
+        "y": 420,
+        "wires": [
+            [
+                "a3aaed5dd4e4e165"
+            ]
+        ]
+    },
+    {
+        "id": "5e09d09bc77a1f73",
+        "type": "ui_gauge",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "group": "20d9cbfa361b278b",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "density",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1320,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "3f881991b9c06040",
+        "type": "ui_gauge",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "group": "20d9cbfa361b278b",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Motion Level",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 10,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1330,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "46b709dc343fb9ca",
+        "type": "ui_gauge",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "group": "20d9cbfa361b278b",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Device Count",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "200",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1340,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "4251a0d98654c438",
+        "type": "function",
+        "z": "111c29150b248e1f",
+        "name": "function 6",
+        "func": "msg.payload = msg.payload.components.density;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1120,
+        "y": 500,
+        "wires": [
+            [
+                "5e09d09bc77a1f73"
+            ]
+        ]
+    },
+    {
+        "id": "f915d605974ccbb8",
+        "type": "function",
+        "z": "111c29150b248e1f",
+        "name": "function 7",
+        "func": "msg.payload = msg.payload.components.motion;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1120,
+        "y": 580,
+        "wires": [
+            [
+                "3f881991b9c06040"
+            ]
+        ]
+    },
+    {
+        "id": "5bc89bbde06a61ea",
+        "type": "function",
+        "z": "111c29150b248e1f",
+        "name": "function 8",
+        "func": "msg.payload = msg.payload.components.devices;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1120,
+        "y": 660,
+        "wires": [
+            [
+                "46b709dc343fb9ca"
+            ]
+        ]
+    },
+    {
+        "id": "34b92eae08266c6d",
+        "type": "function",
+        "z": "111c29150b248e1f",
+        "name": "Format ThingSpeak",
+        "func": "msg.payload = \"api_key=IA1IPHXB4Q3UXL3N\" +\n              \"&field1=\" + msg.payload.components.density +\n              \"&field2=\" + msg.payload.components.motion +\n              \"&field3=\" + msg.payload.components.device_count +\n              \"&field4=\" + msg.payload.risk_score +\n              \"&field5=\" + (msg.payload.risk_level === \"LOW\" ? 1 :\n                           msg.payload.risk_level === \"MEDIUM\" ? 2 :\n                           msg.payload.risk_level === \"HIGH\" ? 3 : 4);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1490,
+        "y": 420,
+        "wires": [
+            [
+                "ee79aea7000e0556"
+            ]
+        ]
+    },
+    {
+        "id": "ee79aea7000e0556",
+        "type": "http request",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://api.thingspeak.com/update",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "other",
+                "keyValue": "Content-Type: application/x-www-form-urlencoded",
+                "valueType": "other",
+                "valueValue": ""
+            }
+        ],
+        "x": 1690,
+        "y": 520,
+        "wires": [
+            [
+                "4e5c852192cba330"
+            ]
+        ]
+    },
+    {
+        "id": "4e5c852192cba330",
+        "type": "debug",
+        "z": "111c29150b248e1f",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1840,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "b2339e3a22432cc7",
+        "type": "delay",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "15",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1280,
+        "y": 420,
+        "wires": [
+            [
+                "34b92eae08266c6d"
+            ]
+        ]
+    },
+    {
+        "id": "aa1d53b3b2c3c681",
+        "type": "delay",
+        "z": "111c29150b248e1f",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "2",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 980,
+        "y": 180,
+        "wires": [
+            [
+                "fde3aa5a250af0e2"
+            ]
+        ]
+    },
+    {
+        "id": "80f94969e81982e5",
+        "type": "function",
+        "z": "111c29150b248e1f",
+        "name": "Critical Alert",
+        "func": "if (msg.payload.risk_level === \"CRITICAL\") {\n    msg.payload = \"🚨 CRITICAL ALERT: Crowd density too high at \" + msg.payload.zone;\n    return msg;\n}\n\nreturn null; // ignore non-critical",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1270,
+        "y": 200,
+        "wires": [
+            [
+                "c3b34b10a02aab83"
+            ]
+        ]
+    },
+    {
+        "id": "7913a69daebc126b",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]
